@@ -1,0 +1,13 @@
+{
+    "name": "mongo-cursus",
+    "version": "0.0.1",
+    "description": "mongodb odm based on constructors",
+    "keywords": ["mean", "mongo", "odm"],
+    "author": "Rafael Erthal <rafaerthal@gmail.com>",
+    "repository": { "type": "git", "url": "https://github.com/rafaelalmeidaerthalhermano/mongo-cursus.git" },
+    "dependencies": {
+        "inflection-extended":"0.0.2"
+    },
+    "main": "./index.js",
+    "engines": { "node": ">= 0.4.x" }
+}
