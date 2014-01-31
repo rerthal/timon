@@ -1,5 +1,8 @@
 /*examples*/
-var Model = require('./index').Model;
+var cursus = require('./index');
+var Model = cursus.Model;
+
+cursus.connect('mongodb://localhost/db');
 
 var Person = new Model('Person', function (set) {
     'use strict';

@@ -1,7 +1,19 @@
 var events = require('events');
 var util   = require('util');
+var Query  = require('./query');
+var Connection = require('./connection');
 
-var Property, Model;
+var Property, Model, connection;
+
+function connect(mongoURI) {
+    connection = new Connection(mongoURI);
+
+    connection.on('ready', function () {
+        Query.setConnection(connection);
+    });
+
+    connection.connect();
+}
 
 Property = function PropertyConstructor (instance, data, options) {
     'use strict';
