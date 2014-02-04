@@ -1,19 +1,20 @@
 var events = require('events');
 var util   = require('util');
-var Query  = require('./query');
+var utils  = require('./utils');
+var QueryScope = require('./query_scope');
 var Connection = require('./connection');
 
 var Property, Model, connection;
 
-function connect(mongoURI) {
+function connect(mongoURI, callback) {
     connection = new Connection(mongoURI);
 
-    connection.on('ready', function () {
-        Query.setConnection(connection);
-    });
+    Connection.setDefaultConnection(connection);
 
-    connection.connect();
+    if (callback) connection.connect(callback);
 }
+
+exports.connect = connect;
 
 Property = function PropertyConstructor (instance, data, options) {
     'use strict';
@@ -86,7 +87,7 @@ Property = function PropertyConstructor (instance, data, options) {
 
 exports.Property = Property;
 
-Model = function ModelConstructor (name, constructor, parent) {
+Model = function ModelConstructor (name, constructor, parent, options) {
     'use strict';
 
     var model;
@@ -130,30 +131,16 @@ Model = function ModelConstructor (name, constructor, parent) {
         return true;
     });
 
-    model.find = function ModelFind () {
-        if (parent) {
-            //se tiver um pai filtrar na query pelo discrimador
-            return parent.find(/*lalalal*/).and({_type : name});
-        }
-    };
-
-    model.findOne = function ModelFindOne () {
-        if (parent) {
-            //se tiver um pai filtrar na query pelo discrimador
-            return parent.findOne(/*lalalal*/).and({_type : name});
-        }
-    };
-
-    model.findById = function ModelFindById () {
-        if (parent) {
-            //se tiver um pai filtrar na query pelo discrimador
-            return parent.findById(/*lalalal*/).and({_type : name});
-        }
-    };
-
     model.extend = function ModelExtend (name, constructor) {
         return new Model(name, constructor, model);
     };
+
+    if (name) {
+        // If inheriting models, define default scope as discriminator
+        var defaultScope = (parent ? {_type: name} : null);
+        var query = new QueryScope(utils.underscored(name), Connection.defaultConnection, defaultScope);
+        model.scoped = query.scoped;
+    }
 
     util.inherits(model, events.EventEmitter);
 

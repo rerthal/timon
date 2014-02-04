@@ -7,6 +7,10 @@ util.inherits(Connection, events.EventEmitter);
 
 Connection.mongodb = mongodb;
 
+Connection.setDefaultConnection = function (conn) {
+    this.defaultConnection = conn;
+};
+
 function Connection(connectionString) {
     'use strict';
 
@@ -24,7 +28,7 @@ Connection.prototype.connect = function ConnectionConnect(callback) {
     this.connecting = true;
 
     this._getConnection = thunky(function (callback) {
-        mongodb.Db.connect(this.connectionString, function (err, db) {
+        mongodb.Db.connect(self.connectionString, function (err, db) {
             if (err) return callback(err);
 
             self.db = db;
@@ -38,7 +42,7 @@ Connection.prototype.connect = function ConnectionConnect(callback) {
     if (callback) this._getConnection(callback);
 };
 
-Connection.prototype.getConnection = function ConnectionGetConn(callback) {
+Connection.prototype.onReady = function ConnectionGetConn(callback) {
     if (!this.connecting)
         return this.connect(callback);
 

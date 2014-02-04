@@ -51,3 +51,16 @@ pluto = new Dog({
     owner : {name : 'mickey'},
     collar : {color : 'red'}
 });
+
+//  The following line will produce a query scoped as
+//
+//      {_type: 'Dog', bornDate: {$gt: new Date()}}
+//
+//  The equivalent on mongoshell would be
+//
+//      db.pet.findOne({
+//          _type: 'Dog', bornDate: {$gt: new Date()}
+//      }, {}).toArray()[0]
+Dog.scoped.where('bornDate').gt(new Date()).findOne().exec(function (err, dog) {
+    console.log('error:', err, 'dog:', dog);
+});
