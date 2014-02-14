@@ -11,6 +11,9 @@ Connection.setDefaultConnection = function (conn) {
     this.defaultConnection = conn;
 };
 
+//TODO Make it private and provide methods to clear and get a connection
+Connection.pool = [];
+
 function Connection(connectionString) {
     'use strict';
 
@@ -20,6 +23,8 @@ function Connection(connectionString) {
     events.EventEmitter.call(this);
 
     this.connectionString = connectionString;
+
+    Connection.pool.push(this);
 }
 
 Connection.prototype.connect = function ConnectionConnect(callback) {
