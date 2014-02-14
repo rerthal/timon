@@ -47,7 +47,7 @@ Connection.prototype.connect = function ConnectionConnect(callback) {
     if (callback) this._getConnection(callback);
 };
 
-Connection.prototype.onReady = function ConnectionGetConn(callback) {
+Connection.prototype.whenConnected = function ConnectionGetConn(callback) {
     if (!this.connecting)
         return this.connect(callback);
 

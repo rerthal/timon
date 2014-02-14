@@ -137,6 +137,7 @@ Model = function ModelConstructor (name, constructor, parent, options) {
 
     if (name) {
         // If inheriting models, define default scope as discriminator
+        //TODO Make discriminator property changable (not only _type)
         var defaultScope = (parent ? {_type: name} : null);
         var query = new QueryScope(utils.underscored(name), Connection.defaultConnection, defaultScope);
         model.scoped = query.scoped;
