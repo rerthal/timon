@@ -1,8 +1,8 @@
 /*examples*/
-var cursus = require('./index');
-var Model = cursus.Model;
+var timon = require('./index');
+var Model = timon.Model;
 
-cursus.connect('mongodb://localhost/cursus-test');
+timon.connect('mongodb://localhost/timon-example');
 
 var Person = new Model('Person', function (set) {
     'use strict';
