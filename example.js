@@ -2,7 +2,7 @@
 var cursus = require('./index');
 var Model = cursus.Model;
 
-cursus.connect('mongodb://localhost/db');
+cursus.connect('mongodb://localhost/cursus-test');
 
 var Person = new Model('Person', function (set) {
     'use strict';
@@ -60,7 +60,7 @@ pluto = new Dog({
 //
 //      db.pet.findOne({
 //          _type: 'Dog', bornDate: {$gt: new Date()}
-//      }, {}).toArray()[0]
+//      }, {})
 Dog.scoped.where('bornDate').gt(new Date()).findOne().exec(function (err, dog) {
     console.log('error:', err, 'dog:', dog);
 });

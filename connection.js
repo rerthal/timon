@@ -32,19 +32,21 @@ Connection.prototype.connect = function ConnectionConnect(callback) {
 
     this.connecting = true;
 
-    this._getConnection = thunky(function (callback) {
+    this._getConnection = thunky(function (done) {
         mongodb.Db.connect(self.connectionString, function (err, db) {
-            if (err) return callback(err);
+            if (err) return done(err);
 
             self.db = db;
             db.on('error', function (err) { self.emit('error', err); });
 
             self.emit('ready');
-            callback(null, db);
+            done(null, db);
         });
     });
 
     if (callback) this._getConnection(callback);
+
+    return this;
 };
 
 Connection.prototype.whenConnected = function ConnectionGetConn(callback) {
