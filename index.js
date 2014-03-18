@@ -1,6 +1,6 @@
 var events = require('events');
 var util   = require('util');
-var utils  = require('./utils');
+var inflect = require('inflection-extended');
 var QueryScope = require('./query_scope');
 var Connection = require('./connection');
 
@@ -139,7 +139,7 @@ Model = function ModelConstructor (name, constructor, parent, options) {
         // If inheriting models, define default scope as discriminator
         //TODO Make discriminator property changable (not only _type)
         var defaultScope = (parent ? {_type: name} : null);
-        var query = new QueryScope(utils.underscored(name), Connection.defaultConnection, defaultScope);
+        var query = new QueryScope(inflect(name).underscore().pluralize().value(), Connection.defaultConnection, defaultScope);
         model.scoped = query.scoped;
     }
 
