@@ -59,8 +59,8 @@ pluto = new Dog({
 //  The equivalent on mongoshell would be
 //
 //      db.pet.findOne({
-//          _type: 'Dog', bornDate: {$gt: new Date()}
+//          _type: 'Dog', bornDate: {$lt: new Date()}
 //      }, {})
-Dog.scoped.where('bornDate').gt(new Date()).findOne().exec(function (err, dog) {
-    console.log('error:', err, 'dog:', dog);
+Dog.scoped().where('bornDate').lt(new Date()).findOne(function (err, dog) {
+    if (dog) { dog.bark(); }
 });

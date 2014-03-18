@@ -90,7 +90,20 @@ exports.Property = Property;
 Model = function ModelConstructor (name, constructor, parent, options) {
     'use strict';
 
-    var model;
+    var model, defaultScope;
+
+    options = (options || {});
+
+    if (name) { // TODO: Enable query for anonymous nested docs
+        options.discriminator  = (options.discriminator  || '_type');
+        options.collectionName = (options.collectionName || inflect(name).underscore().pluralize().value());
+
+        // If inheriting models, define default scope as discriminator
+        if (parent) {
+            defaultScope = {};
+            defaultScope[options.discriminator] = name;
+        }
+    }
 
     model = function EntityConstructor (data) {
         var instance, properties;
@@ -131,17 +144,18 @@ Model = function ModelConstructor (name, constructor, parent, options) {
         return true;
     });
 
+    model.scoped = function ModelScoped () {
+        if (!name) return null; // TODO: Enable query for anonymous nested docs
+
+        var query = new QueryScope(this, options.collectionName,
+                                   Connection.defaultConnection, defaultScope);
+
+        return query.scoped;
+    };
+
     model.extend = function ModelExtend (name, constructor) {
         return new Model(name, constructor, model);
     };
-
-    if (name) {
-        // If inheriting models, define default scope as discriminator
-        //TODO Make discriminator property changable (not only _type)
-        var defaultScope = (parent ? {_type: name} : null);
-        var query = new QueryScope(inflect(name).underscore().pluralize().value(), Connection.defaultConnection, defaultScope);
-        model.scoped = query.scoped;
-    }
 
     util.inherits(model, events.EventEmitter);
 
