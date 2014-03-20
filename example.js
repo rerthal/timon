@@ -61,6 +61,6 @@ pluto = new Dog({
 //      db.pet.findOne({
 //          _type: 'Dog', bornDate: {$lt: new Date()}
 //      }, {})
-Dog.scoped().where('bornDate').lt(new Date()).findOne(function (err, dog) {
+Dog.scoped().where('bornDate').lt(new Date()).findOne().exec(function (err, dog) {
     if (dog) { dog.bark(); }
 });

@@ -1,7 +1,7 @@
 var events = require('events');
 var util   = require('util');
 var inflect = require('inflection-extended');
-var QueryScope = require('./query_scope');
+var Query = require('./query');
 var Connection = require('./connection');
 
 var Property, Model, connection;
@@ -147,8 +147,7 @@ Model = function ModelConstructor (name, constructor, parent, options) {
     model.scoped = function ModelScoped () {
         if (!name) return null; // TODO: Enable query for anonymous nested docs
 
-        var query = new QueryScope(this, options.collectionName,
-                                   Connection.defaultConnection, defaultScope);
+        var query = new Query(this, options.collectionName, Connection.defaultConnection, defaultScope);
 
         return query.scoped;
     };
