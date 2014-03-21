@@ -12,6 +12,8 @@ function connect(mongoURI, callback) {
     Connection.setDefaultConnection(connection);
 
     if (callback) connection.connect(callback);
+
+    return connection;
 }
 
 exports.connect = connect;
